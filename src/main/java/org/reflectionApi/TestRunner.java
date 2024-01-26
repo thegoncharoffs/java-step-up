@@ -12,12 +12,20 @@ public class TestRunner {
         int beforeSuiteCounter = 0;
         int afterSuiteCounter = 0;
         for (Method method : methods) {
+            // BeforeSuite annotation must be only once
             if (method.isAnnotationPresent(BeforeSuite.class)) {
                 beforeSuiteCounter++;
+                if (beforeSuiteCounter > 1) {
+                    throw new RuntimeException("Too many BeforeSuite annotations");
+                }
             }
 
+            // AfterSuite annotation must be only once
             if (method.isAnnotationPresent(AfterSuite.class)) {
                 afterSuiteCounter++;
+                if (afterSuiteCounter > 1) {
+                    throw new RuntimeException("Too many AfterSuite annotations");
+                }
             }
 
             // Check priority param to be from 1 to 10
@@ -29,19 +37,9 @@ public class TestRunner {
             }
         }
 
-        // Check valid annotations quantity
-        if (beforeSuiteCounter > 1) {
-            throw new RuntimeException("Too many BeforeSuite annotations");
-        }
-
-        if (afterSuiteCounter > 1) {
-            throw new RuntimeException("Too many AfterSuite annotations");
-        }
-
         methods = Arrays.stream(methods)
                 // Filter methods by required annotations
-                .filter(item -> item.isAnnotationPresent(AfterSuite.class)
-                        || item.isAnnotationPresent(Test.class) || item.isAnnotationPresent(BeforeSuite.class))
+                .filter(item -> item.isAnnotationPresent(BeforeSuite.class) || item.isAnnotationPresent(Test.class) || item.isAnnotationPresent(AfterSuite.class))
                 // Sort methods by annotations
                 .sorted(new MethodsWithAnnotationsComparator()).toArray(Method[]::new);
 
