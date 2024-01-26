@@ -1,4 +1,4 @@
-package org.lesson12;
+package org.reflectionApi;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,10 +32,10 @@ public class TestRunner {
 
         methods = Arrays.stream(methods)
                 // Filter methods by required annotations
-                .filter(item -> item.isAnnotationPresent(AfterSuite.class) || item.isAnnotationPresent(Test.class) || item.isAnnotationPresent(BeforeSuite.class))
+                .filter(item -> item.isAnnotationPresent(AfterSuite.class)
+                        || item.isAnnotationPresent(Test.class) || item.isAnnotationPresent(BeforeSuite.class))
                 // Sort methods by annotations
-                .sorted(new MethodsWithAnnotationsComparator())
-                .toArray(Method[]::new);
+                .sorted(new MethodsWithAnnotationsComparator()).toArray(Method[]::new);
 
         // Invoke methods
         for (Method method : methods) {
