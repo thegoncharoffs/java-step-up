@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class TestRunner {
-    public static void runTest(Class c) throws InvocationTargetException, IllegalAccessException, RuntimeException {
+    public static void runTest(Class c) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = c.getDeclaredMethods();
 
         // Count BeforeSuite and AfterSuite quantity
@@ -18,6 +18,14 @@ public class TestRunner {
 
             if (method.isAnnotationPresent(AfterSuite.class)) {
                 afterSuiteCounter++;
+            }
+
+            // Check priority param to be from 1 to 10
+            if (method.isAnnotationPresent(Test.class)) {
+                int priority = method.getAnnotation(Test.class).priority();
+                if (priority < 1 || priority > 10) {
+                    throw new IllegalArgumentException("priority in Test annotation must be from 1 to 10");
+                }
             }
         }
 
