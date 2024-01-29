@@ -1,4 +1,4 @@
-package org.reflectionApi;
+package org.reflectionapi;
 
 public class Box {
     @BeforeSuite

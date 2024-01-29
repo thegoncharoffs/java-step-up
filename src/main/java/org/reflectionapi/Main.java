@@ -1,4 +1,4 @@
-package org.reflectionApi;
+package org.reflectionapi;
 
 import java.lang.reflect.InvocationTargetException;
 
