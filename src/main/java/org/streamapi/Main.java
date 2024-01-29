@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * - Найдите в списке слов самое длинное
  * - Имеется строка с набором слов в нижнем регистре, разделенных пробелом. Постройте хеш-мапы, в которой будут хранится пары: слово - сколько раз оно встречается во входной строке
  * - Отпечатайте в консоль строки из списка в порядке увеличения длины слова, если слова имеют одинаковую длины, то должен быть сохранен алфавитный порядок
- * Имеется массив строк, в каждой из которых лежит набор из 5 строк, разделенных пробелом, найдите среди всех слов самое длинное, если таких слов несколько, получите любое из них
+ * - Имеется массив строк, в каждой из которых лежит набор из 5 строк, разделенных пробелом, найдите среди всех слов самое длинное, если таких слов несколько, получите любое из них
  */
 public class Main {
     public static <T> List<T> removeDuplicates(List<T> arr) {
@@ -98,6 +98,10 @@ public class Main {
                 .collect(Collectors.toList());
     }
 
+    public static String findLongestWordInSeparatedString(List<String> strings) {
+        return findLongestWord(strings.stream().map(str -> findLongestWord(List.of(str.split(" ")))).collect(Collectors.toList()));
+    }
+
     public static void main(String[] args) {
         List<Integer> arr = List.of(5, 2, 10, 9, 4, 3, 10, 1, 13);
 
@@ -137,5 +141,8 @@ public class Main {
         // Отпечатайте в консоль строки из списка в порядке увеличения длины слова, если слова имеют одинаковую длины, то должен быть сохранен алфавитный порядок
         System.out.println(Arrays.toString(sortStringsByLengthAndLetters(strings).toArray()));
 
+        // Имеется массив строк, в каждой из которых лежит набор из 5 строк, разделенных пробелом, найдите среди всех слов самое длинное, если таких слов несколько, получите любое из них
+        List<String> string2 = List.of("a a aa aaaa aaa", "aa sdsd sdsd", "b", "asd sddddsad asd");
+        System.out.println(findLongestWordInSeparatedString(string2));
     }
 }
