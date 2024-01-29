@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class TestRunner {
-    public static void runTest(Class c) throws InvocationTargetException, IllegalAccessException {
+    public static void runTest(Class<?> c) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = c.getDeclaredMethods();
 
         // Count BeforeSuite and AfterSuite quantity
