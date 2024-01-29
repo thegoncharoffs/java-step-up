@@ -56,11 +56,11 @@ public class Main {
                 // Sort by age
                 .sorted((a, b) -> b.getAge() - a.getAge())
                 // Limit by n
-                .limit(n).collect(Collectors.toList());
+                .limit(n)
+                .collect(Collectors.toList());
     }
 
     public static double avgAgeByPosition(List<Employee> employees, String position) {
-
         return employees.stream()
                 // Filter by position
                 .filter(employee -> employee.getPosition().equals(position))
@@ -75,7 +75,27 @@ public class Main {
     }
 
     public static String findLongestWord(List<String> strings) {
-        return strings.stream().max(Comparator.comparingInt(String::length)).get();
+        return strings.stream().max(Comparator.comparingInt(String::length)).orElse("");
+    }
+
+    public static Map<String, Integer> createWordFrequencyMap(String str) {
+        String[] words = str.split(" ");
+        Map<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            if (map.containsKey(word)) {
+                map.put(word, map.get(word) + 1);
+            } else {
+                map.put(word, 1);
+            }
+        }
+
+        return map;
+    }
+
+    public static List<String> sortStringsByLengthAndLetters(List<String> strings) {
+        return strings.stream()
+                .sorted((a, b) -> a.length() - b.length() != 0 ? a.length() - b.length() : a.compareTo(b))
+                .collect(Collectors.toList());
     }
 
     public static void main(String[] args) {
@@ -106,10 +126,16 @@ public class Main {
         // Имеется список объектов типа Сотрудник (имя, возраст, должность), посчитайте средний возраст сотрудников с должностью «Инженер»
         System.out.println(avgAgeByPosition(employees, "Engineer"));
 
-        List<String> strings = List.of("a", "aa", "aaaa", "asdasd");
+        List<String> strings = List.of("a", "aa", "b", "bb", "aaaa", "asdasd", "bbbb");
 
         // Найдите в списке слов самое длинное
         System.out.println(findLongestWord(strings));
+
+        // Имеется строка с набором слов в нижнем регистре, разделенных пробелом. Постройте хеш-мапы, в которой будут хранится пары: слово - сколько раз оно встречается во входной строке
+        System.out.println(createWordFrequencyMap("a b aa bb a b bb a c d d a"));
+
+        // Отпечатайте в консоль строки из списка в порядке увеличения длины слова, если слова имеют одинаковую длины, то должен быть сохранен алфавитный порядок
+        System.out.println(Arrays.toString(sortStringsByLengthAndLetters(strings).toArray()));
 
     }
 }
