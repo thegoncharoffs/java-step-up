@@ -38,18 +38,10 @@ public class Main {
     }
 
     public static Integer findNthUniqueMax(List<Integer> arr, int n) {
-        if (arr.size() < n) {
-            throw new IllegalArgumentException("Length of array must be > " + n);
-        }
-
-        Set<Integer> set = new LinkedHashSet<>(arr);
-        List<Integer> copy = new ArrayList<>(set);
-        Collections.sort(copy);
-
-        return copy.get(copy.size() - n);
+        return findNthMax(removeDuplicates(arr), n);
     }
 
-    public static List<Employee> findKOldestNEmployeesByPosition(List<Employee> employees, String position, int n) {
+    public static List<Employee> findNOldestEmployeesByPosition(List<Employee> employees, String position, int n) {
         return employees.stream()
                 // Filter by position
                 .filter(employee -> employee.getPosition().equals(position))
@@ -75,7 +67,10 @@ public class Main {
     }
 
     public static String findLongestWord(List<String> strings) {
-        return strings.stream().max(Comparator.comparingInt(String::length)).orElse("");
+        return strings
+                .stream()
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
     }
 
     public static Map<String, Integer> createWordFrequencyMap(String str) {
@@ -99,7 +94,9 @@ public class Main {
     }
 
     public static String findLongestWordInSeparatedString(List<String> strings) {
-        return findLongestWord(strings.stream().map(str -> findLongestWord(List.of(str.split(" ")))).collect(Collectors.toList()));
+        return findLongestWord(strings.stream()
+                .map(str -> findLongestWord(List.of(str.split(" "))))
+                .collect(Collectors.toList()));
     }
 
     public static void main(String[] args) {
@@ -125,7 +122,7 @@ public class Main {
         );
 
         // Имеется список объектов типа Сотрудник (имя, возраст, должность), необходимо получить список имен 3 самых старших сотрудников с должностью «Инженер», в порядке убывания возраста
-        System.out.println(Arrays.toString(findKOldestNEmployeesByPosition(employees, "Engineer", 3).toArray()));
+        System.out.println(Arrays.toString(findNOldestEmployeesByPosition(employees, "Engineer", 3).toArray()));
 
         // Имеется список объектов типа Сотрудник (имя, возраст, должность), посчитайте средний возраст сотрудников с должностью «Инженер»
         System.out.println(avgAgeByPosition(employees, "Engineer"));
@@ -139,7 +136,7 @@ public class Main {
         System.out.println(createWordFrequencyMap("a b aa bb a b bb a c d d a"));
 
         // Отпечатайте в консоль строки из списка в порядке увеличения длины слова, если слова имеют одинаковую длины, то должен быть сохранен алфавитный порядок
-        System.out.println(Arrays.toString(sortStringsByLengthAndLetters(strings).toArray()));
+        System.out.println(sortStringsByLengthAndLetters(strings));
 
         // Имеется массив строк, в каждой из которых лежит набор из 5 строк, разделенных пробелом, найдите среди всех слов самое длинное, если таких слов несколько, получите любое из них
         List<String> string2 = List.of("a a aa aaaa aaa", "aa sdsd sdsd", "b", "asd sddddsad asd");
