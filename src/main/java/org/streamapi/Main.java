@@ -2,10 +2,11 @@ package org.streamapi;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Коллекции и Stream API
- * Все задачи должны быть выполнены в одну строку.
+ * Все задачи должны быть выполнены в одну строку
  * - Реализуйте удаление из листа всех дубликатов
  * - Найдите в списке целых чисел 3-е наибольшее число (пример: 5 2 10 9 4 3 10 1 13 => 10)
  * - Найдите в списке целых чисел 3-е наибольшее «уникальное» число (пример: 5 2 10 9 4 3 10 1 13 => 9, в отличие от прошлой задачи здесь разные 10 считает за одно число)
@@ -18,27 +19,24 @@ import java.util.stream.Collectors;
  */
 public class Main {
     public static <T> List<T> removeDuplicates(List<T> arr) {
-        if (arr.size() < 2) {
-            return arr;
-        }
-
-        Set<T> set = new LinkedHashSet<>(arr);
-        return new ArrayList<>(set);
+        return arr.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public static Integer findNthMax(List<Integer> arr, int n) {
-        if (arr.size() < n) {
-            throw new IllegalArgumentException("Length of array must be > " + n);
-        }
-
-        List<Integer> copy = new ArrayList<>(arr);
-        Collections.sort(copy);
-
-        return copy.get(copy.size() - n);
+        return arr.stream()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList())
+                .get(n - 1);
     }
 
     public static Integer findNthUniqueMax(List<Integer> arr, int n) {
-        return findNthMax(removeDuplicates(arr), n);
+        return arr.stream()
+                .distinct()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList())
+                .get(n - 1);
     }
 
     public static List<Employee> findNOldestEmployeesByPosition(List<Employee> employees, String position, int n) {
@@ -73,18 +71,9 @@ public class Main {
                 .orElse("");
     }
 
-    public static Map<String, Integer> createWordFrequencyMap(String str) {
-        String[] words = str.split(" ");
-        Map<String, Integer> map = new HashMap<>();
-        for (String word : words) {
-            if (map.containsKey(word)) {
-                map.put(word, map.get(word) + 1);
-            } else {
-                map.put(word, 1);
-            }
-        }
-
-        return map;
+    public static Map<String, Long> createWordFrequencyMap(String str) {
+        return Arrays.stream(str.split(" "))
+                .collect((Collectors.groupingBy(k -> k, Collectors.counting())));
     }
 
     public static List<String> sortStringsByLengthAndLetters(List<String> strings) {
@@ -94,9 +83,10 @@ public class Main {
     }
 
     public static String findLongestWordInSeparatedString(List<String> strings) {
-        return findLongestWord(strings.stream()
-                .map(str -> findLongestWord(List.of(str.split(" "))))
-                .collect(Collectors.toList()));
+        return strings.stream()
+                .flatMap(str -> Stream.of(str.split(" ")))
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
     }
 
     public static void main(String[] args) {
