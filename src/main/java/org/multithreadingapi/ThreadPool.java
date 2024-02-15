@@ -1,12 +1,12 @@
 package org.multithreadingapi;
 
-import java.util.concurrent.*;
+import java.util.LinkedList;
 
 public class ThreadPool {
 
     private final Worker[] workers;
 
-    private final LinkedBlockingQueue<Runnable> queue;
+    private final LinkedList<Runnable> queue;
 
     private boolean isInterrupted = false;
 
@@ -37,12 +37,11 @@ public class ThreadPool {
     }
 
     public ThreadPool(int poolSize) {
-        queue = new LinkedBlockingQueue<>();
+        queue = new LinkedList<>();
         workers = new Worker[poolSize];
 
         for (int i = 0; i < poolSize; i++) {
             workers[i] = new Worker();
-            workers[i].setDaemon(true);
             workers[i].start();
         }
     }
